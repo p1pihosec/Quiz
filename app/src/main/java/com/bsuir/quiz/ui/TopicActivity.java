@@ -1,12 +1,14 @@
 package com.bsuir.quiz.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,6 +60,7 @@ public class TopicActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     topics.clear();
+                    topUsers.clear();
                     for (DataSnapshot sn : snapshot.child("Score").child("user").getChildren()) {
                         Score score = sn.getValue(Score.class);
                         topUsers.add(score);
@@ -97,6 +100,18 @@ public class TopicActivity extends AppCompatActivity {
         };
         reference.addValueEventListener(eventListener);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.top_users);
+        toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.top:
+                    Intent intent = new Intent(this, TopActivity.class);
+                    startActivity(intent);
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        });
     }
 
     private void runLayoutAnimation(RecyclerView recyclerView) {

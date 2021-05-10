@@ -3,16 +3,24 @@ package com.bsuir.quiz.model;
 public class Score {
 
     private String name;
-    private String value;
+    private Long value;
     private String time;
 
     public Score() {
     }
 
-    public Score(String name, String value, String time) {
+    public Score(String name, Long value, String time) {
         this.name = name;
         this.value = value;
         this.time = time;
+    }
+
+    public void setValue(Long value) {
+        this.value = value;
+    }
+
+    public Long getValue() {
+        return value;
     }
 
     public String getName() {
@@ -21,14 +29,6 @@ public class Score {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
     public String getTime() {

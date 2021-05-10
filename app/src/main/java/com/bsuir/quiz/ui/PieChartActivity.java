@@ -39,6 +39,7 @@ public class PieChartActivity extends AppCompatActivity {
     private FirebaseUser user;
     private List<Score> topUsers = TopicActivity.getTopUsers();
     private Score score;
+    private List<Score> scoreList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class PieChartActivity extends AppCompatActivity {
         thirdUser = findViewById(R.id.third_user);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        score = new Score(user.getEmail(), String.valueOf(amountOfAnswers[0]),
+        score = new Score(user.getEmail(), (long) amountOfAnswers[0],
                 String.valueOf(QuestionFragment.getTransitTime()));
         ref = FirebaseDatabase.getInstance().getReference();
         long transitTime = QuestionFragment.getTransitTime();
@@ -71,8 +72,14 @@ public class PieChartActivity extends AppCompatActivity {
     }
 
     private List<Score> sortList() {
-        List<Score> scoreList = topUsers.stream().sorted(Comparator.comparing(Score::getValue).reversed().thenComparing(Score::getTime)).collect(Collectors.toList());
+        scoreList = topUsers.stream().sorted(Comparator.comparing(Score::getValue).reversed().thenComparing(Score::getTime)).collect(Collectors.toList());
         ref.child("Score").child("user").setValue(scoreList);
+        for (int i = 0; i < scoreList.size(); i++) {
+            int minutes = (int) (Integer.parseInt(scoreList.get(i).getTime()) / 1000) / 60;
+            int seconds = (int) (Integer.parseInt(scoreList.get(i).getTime()) / 1000) % 60;
+            String timeFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+            scoreList.get(i).setTime(timeFormatted);
+        }
         return scoreList;
     }
 
@@ -81,11 +88,11 @@ public class PieChartActivity extends AppCompatActivity {
         if (topUsers.size() < 3) {
             addUser();
         }
-        if (topUsers.size() == 3) {
+        else if (topUsers.size() == 3) {
             for (int i = topUsers.size() - 1; i >= 0; i--) {
                 if ((Long.parseLong(topUsers.get(i).getTime()) <= QuestionFragment.getTransitTime() &&
                         topUsers.get(i).getName().equals(user.getEmail())) ||
-                        (Integer.parseInt(topUsers.get(i).getValue()) <= amountOfAnswers[0] &&
+                        (Integer.parseInt(String.valueOf(topUsers.get(i).getValue())) <= amountOfAnswers[0] &&
                                 topUsers.get(i).getName().equals(user.getEmail()))) {
                     ref.child("Score").child("user").child(String.valueOf(i)).setValue(score);
                     indexOfRemovedElement = i;
@@ -93,7 +100,7 @@ public class PieChartActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     break;
                 } else if (Long.parseLong(topUsers.get(i).getTime()) <= QuestionFragment.getTransitTime() ||
-                        Integer.parseInt(topUsers.get(i).getValue()) <= amountOfAnswers[0]) {
+                        Integer.parseInt(String.valueOf(topUsers.get(i).getValue())) <= amountOfAnswers[0]) {
                     ref.child("Score").child("user").child(String.valueOf(i)).setValue(score);
                     Toast.makeText(PieChartActivity.this, "You're one of the best users!!!",
                             Toast.LENGTH_SHORT).show();
@@ -105,16 +112,19 @@ public class PieChartActivity extends AppCompatActivity {
                 topUsers.remove(indexOfRemovedElement);
                 topUsers.add(score);
             }
-            firstUser.setText("1) " + sortList().get(0).toString());
-            secondUser.setText("2) " + sortList().get(1).toString());
-            thirdUser.setText("3)" + sortList().get(2).toString());
+            sortList();
+            firstUser.setText("1) " + scoreList.get(0).toString());
+            secondUser.setText("2) " + scoreList.get(1).toString());
+            thirdUser.setText("3)" + scoreList.get(2).toString());
         }
         if (topUsers.size() == 1) {
-            firstUser.setText("1) " + sortList().get(0).toString());
+            sortList();
+            firstUser.setText("1) " + scoreList.get(0).toString());
         }
         if (topUsers.size() == 2) {
-            firstUser.setText("1) " + sortList().get(0).toString());
-            secondUser.setText("2) " + sortList().get(1).toString());
+            sortList();
+            firstUser.setText("1) " + scoreList.get(0).toString());
+            secondUser.setText("2) " + scoreList.get(1).toString());
         }
 
     }
@@ -125,7 +135,7 @@ public class PieChartActivity extends AppCompatActivity {
             for (int i = topUsers.size() - 1; i >= 0; i--) {
                 if ((Long.parseLong(topUsers.get(i).getTime()) <= QuestionFragment.getTransitTime() &&
                         topUsers.get(i).getName().equals(user.getEmail())) ||
-                        (Integer.parseInt(topUsers.get(i).getValue()) <= amountOfAnswers[0] &&
+                        (Integer.valueOf(String.valueOf(topUsers.get(i).getValue())) <= amountOfAnswers[0] &&
                                 topUsers.get(i).getName().equals(user.getEmail()))) {
                     ref.child("Score").child("user").child(String.valueOf(i)).setValue(score);
                     indexOfRemovedElement = i;
@@ -133,7 +143,7 @@ public class PieChartActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     break;
                 } else if (Long.parseLong(topUsers.get(i).getTime()) <= QuestionFragment.getTransitTime() ||
-                        Integer.parseInt(topUsers.get(i).getValue()) <= amountOfAnswers[0]) {
+                        Integer.parseInt(String.valueOf(topUsers.get(i).getValue())) <= amountOfAnswers[0]) {
                     ref.child("Score").child("user").child(String.valueOf(i + 1)).setValue(score);
                     Toast.makeText(PieChartActivity.this, "You're one of the best users!!!",
                             Toast.LENGTH_SHORT).show();
