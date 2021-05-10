@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.PieChartActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/purple_500"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_marginRight="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Statistic"
+            android:textAlignment="textEnd"
+            android:textColor="#ffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/transit_time"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:textSize="25sp"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/any_chart_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <com.anychart.AnyChartView
+        android:id="@+id/any_chart_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/first_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transit_time" />
+
+    <TextView
+        android:id="@+id/first_user"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/second_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/second_user"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/third_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/third_user"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
