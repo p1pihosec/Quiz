@@ -41,8 +41,6 @@ import java.util.Locale;
 
 public class QuestionFragment extends Fragment implements View.OnClickListener {
 
-    private OnButtonClickListener mOnButtonClickListener;
-
     private long countdownInMillisS = (long) -1;
     private CountDownTimer countDownTimer;
     private long timeLeftInMillis;
@@ -74,26 +72,10 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
 
     public QuestionFragment() {
     }
-
-    public interface OnButtonClickListener {
-        void onButtonClicked(View view);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            mOnButtonClickListener = (OnButtonClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(((QuestionActivity) context).getLocalClassName()
-                    + " must implement OnButtonClickListener");
-        }
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -114,7 +96,7 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
         }
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu);
-        toolbar.setOnMenuItemClickListener((Toolbar.OnMenuItemClickListener) item -> {
+        toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.statistics:
                     completeGame();
@@ -332,7 +314,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                 thirdButton.setClickable(false);
                 fourthButton.setClickable(false);
                 transitTime += 30000;
-                mOnButtonClickListener.onButtonClicked(getView());
                 if ((correctAnswer + wrongAnswer + finishTimeQuestion) == QuestionActivity.getAmountOfQuestions()) {
                     showStatistic();
                 }
@@ -383,13 +364,11 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                         || unansweredQuestion == QuestionActivity.getAmountOfQuestions()) {
                     showStatistic();
                 }
-                mOnButtonClickListener.onButtonClicked(view);
                 break;
             case R.id.button_2:
                 if (secondButton.getText().equals(trueAnswer.getName())) {
                     secondButton.setTextColor(Color.GREEN);
                     correctAnswer++;
-                    mOnButtonClickListener.onButtonClicked(view);
                 } else {
                     secondButton.setTextColor(Color.RED);
                     wrongAnswer++;
@@ -411,13 +390,11 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                         || unansweredQuestion == QuestionActivity.getAmountOfQuestions()) {
                     showStatistic();
                 }
-                mOnButtonClickListener.onButtonClicked(view);
                 break;
             case R.id.button_3:
                 if (thirdButton.getText().equals(trueAnswer.getName())) {
                     thirdButton.setTextColor(Color.GREEN);
                     correctAnswer++;
-                    mOnButtonClickListener.onButtonClicked(view);
                 } else {
                     thirdButton.setTextColor(Color.RED);
                     wrongAnswer++;
@@ -439,13 +416,11 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                         || unansweredQuestion == QuestionActivity.getAmountOfQuestions()) {
                     showStatistic();
                 }
-                mOnButtonClickListener.onButtonClicked(view);
                 break;
             case R.id.button_4:
                 if (fourthButton.getText().equals(trueAnswer.getName())) {
                     correctAnswer++;
                     fourthButton.setTextColor(Color.GREEN);
-                    mOnButtonClickListener.onButtonClicked(view);
                 } else {
                     fourthButton.setTextColor(Color.RED);
                     wrongAnswer++;
@@ -467,7 +442,6 @@ public class QuestionFragment extends Fragment implements View.OnClickListener {
                         || unansweredQuestion == QuestionActivity.getAmountOfQuestions()) {
                     showStatistic();
                 }
-                mOnButtonClickListener.onButtonClicked(view);
                 break;
         }
     }

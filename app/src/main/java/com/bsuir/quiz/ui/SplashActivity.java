@@ -14,7 +14,7 @@ import com.bsuir.quiz.R;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final int SPLASH_DELAY = 3500;
+    private final int SPLASH_DELAY = 1500;
     private ImageView imageView;
 
     @Override

@@ -1,14 +1,9 @@
 package com.bsuir.quiz.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +11,6 @@ import com.bsuir.quiz.R;
 import com.bsuir.quiz.adapter.TopicAdapter;
 import com.bsuir.quiz.model.Answer;
 import com.bsuir.quiz.model.Question;
-import com.bsuir.quiz.model.Score;
 import com.bsuir.quiz.model.Topic;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -36,7 +30,6 @@ public class TopicActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<Topic> topics;
     private TopicAdapter adapter;
-    private static List<Score> topUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +39,6 @@ public class TopicActivity extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         recyclerView = findViewById(R.id.recycler_view);
         topics = new ArrayList<>();
-        topUsers = new ArrayList<>();
 
         MobileAds.initialize(getApplicationContext());
         AdView adView = findViewById(R.id.adView);
@@ -60,11 +52,6 @@ public class TopicActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     topics.clear();
-                    topUsers.clear();
-                    for (DataSnapshot sn : snapshot.child("Score").child("user").getChildren()) {
-                        Score score = sn.getValue(Score.class);
-                        topUsers.add(score);
-                    }
                     for (DataSnapshot sn : snapshot.getChildren()) {
                         String name = sn.child("name").getValue(String.class);
                         String url = sn.child("url").getValue(String.class);
@@ -89,7 +76,6 @@ public class TopicActivity extends AppCompatActivity {
                     adapter = new TopicAdapter(topics, getApplicationContext());
                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     recyclerView.setAdapter(adapter);
-                    runLayoutAnimation(recyclerView);
                 }
             }
 
@@ -100,34 +86,6 @@ public class TopicActivity extends AppCompatActivity {
         };
         reference.addValueEventListener(eventListener);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.top_users);
-        toolbar.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.top:
-                    Intent intent = new Intent(this, TopActivity.class);
-                    startActivity(intent);
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
-        });
     }
-
-    private void runLayoutAnimation(RecyclerView recyclerView) {
-        Context context = recyclerView.getContext();
-        LayoutAnimationController layoutAnimationController =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_slide_right);
-        recyclerView.setLayoutAnimation(layoutAnimationController);
-        recyclerView.getAdapter().notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
-    }
-
-    public static List<Score> getTopUsers() {
-        return topUsers;
-    }
-
-    public static void setTopUsers(List<Score> topUsers) {
-        TopicActivity.topUsers = topUsers;
-    }
+    
 }

@@ -1,6 +1,5 @@
 package com.bsuir.quiz.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -59,10 +58,10 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicViewHol
 
     private void showAlertDialog(View v) {
         final Intent[] intent = new Intent[1];
-            QuestionActivity.setAmountOfQuestions(10);
-            intent[0] = new Intent(context, QuestionActivity.class);
-            intent[0].addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent[0]);
+        QuestionActivity.setAmountOfQuestions(10);
+        intent[0] = new Intent(context, QuestionActivity.class);
+        intent[0].addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent[0]);
     }
 
     @Override

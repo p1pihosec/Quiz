@@ -13,7 +13,7 @@ import com.bsuir.quiz.adapter.QuestionAdapter;
 import com.bsuir.quiz.adapter.QuestionFragment;
 import com.bsuir.quiz.adapter.TopicAdapter;
 
-public class QuestionActivity extends AppCompatActivity implements QuestionFragment.OnButtonClickListener {
+public class QuestionActivity extends AppCompatActivity{
 
     private static int amountOfQuestions;
     private ViewPager viewPager;
@@ -45,11 +45,5 @@ public class QuestionActivity extends AppCompatActivity implements QuestionFragm
 
     public static int getAmountOfQuestions() {
         return amountOfQuestions;
-    }
-
-    @Override
-    public void onButtonClicked(View view) {
-        int currPos = viewPager.getCurrentItem();
-        mHandler.postDelayed(() -> viewPager.setCurrentItem(currPos + 1), 2000);
     }
 }
